@@ -1,6 +1,7 @@
 <?php
 require_once 'models/UserModel.php';
-require_once 'controllers/BookController.php';;
+require_once 'controllers/BookController.php';
+
 class LoginController {
     private $bookController;
     private $userModel;
@@ -56,7 +57,7 @@ class LoginController {
             header('Location: index.php?action=login');
             exit();
         }
-        include 'views/user/dashboardUser.php';
+        include 'views\users\dashboardUser.php';
     }
 
     public function logout() {

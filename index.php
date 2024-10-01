@@ -34,14 +34,6 @@ switch ($action) {
     case 'logout':
         $loginController->logout();
         break;
-    case 'updateBook':
-        if (isset($_GET['id'])) {
-            $bookController->updateBookForm($_GET['id']);
-        } else {
-            // Manejar error: ID de libro no proporcionado
-            echo "Error: ID de libro no proporcionado";
-        }
-        break;
 
     case 'confirmationdeleteBook':
         if (isset($_GET['id'])) {
