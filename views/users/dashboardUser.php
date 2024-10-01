@@ -33,9 +33,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="text-decoration-none">
-                        <i class="bi bi-book me-2"></i> Insertar libro
-                    </a>
+                <a href="#" class="text-decoration-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+                    <i class="bi bi-book me-2"></i> Libros leídos
+                </a>
                 </li>
                 <li>
                     <a href="#" class=" text-decoration-none">
@@ -52,16 +52,49 @@
 
         <!-- Page Content -->
         <div id="content">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class=" navbar  bg-light ">
+
                 <div class="container-fluid">
                     <button type="button" id="sidebarCollapse" class="btn btn-info">
                         <i class="bi bi-list"></i>
                         <span class="visually-hidden">Toggle Sidebar</span>
                     </button>
-                    <span class="navbar-brand mb-0 h1">Dashboard Administrador</span>
+                    <span class="navbar-brand mb-0 h1">Bienvenido a la biblioteca virtual</span>
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-primary" type="submit">Search</button>
+                    </form>
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">libros leidos</h5> 
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                        <div class="container-fluid">
+                            <div class="book-container">
+                                <?php foreach ($books as $book): ?>
+                                <div class="book-card">
+                                    <img src="<?php echo htmlspecialchars($book['imagen_book']); ?>" alt="<?php echo htmlspecialchars($book['name_book']); ?>" class="book-cover">
+                                    <div class="book-overlay">
+                                        <h3 class="book-title"><?php echo htmlspecialchars($book['name_book']); ?></h3>
+                                        <p><i class="bi bi-person"></i> Autores</p>
+                
+                <!-- Fecha con ícono de ojo -->
+                <p><i class="bi bi-eye"></i> fecha</p>
+                
+                <!-- Leído con ícono de check -->
+                <p><i class="bi bi-check-circle"></i> leido</p>
+                                    </div>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                        
+                        </div>
+                    </div>
                 </div>
             </nav>
-            <div class="contenido-inferior">
+            <div class="contenido-inferior-user">
                 <div class="container-fluid">
                     <div class="book-container">
                         <?php foreach ($books as $book): ?>
@@ -69,15 +102,12 @@
                             <img src="<?php echo htmlspecialchars($book['imagen_book']); ?>" alt="<?php echo htmlspecialchars($book['name_book']); ?>" class="book-cover">
                             <div class="book-overlay">
                                 <h3 class="book-title"><?php echo htmlspecialchars($book['name_book']); ?></h3>
-                                <p class="book-type"><?php echo htmlspecialchars($book['name_type']); ?></p>
-                                <div class="book-actions">
-                                    <a href="index.php?action=updateBook&id=<?php echo $book['id_book']; ?>" class="btn btn-primary btn-sm">
-                                        <i class="bi bi-pencil"></i> Actualizar
-                                    </a>
+    
+                                <!-- <div class="book-actions">
                                     <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" onclick="confirmDelete(<?php echo $book['id_book']; ?>, '<?php echo addslashes($book['name_book']); ?>')">
                                         <i class="bi bi-trash"></i> Eliminar
                                     </button>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <?php endforeach; ?>

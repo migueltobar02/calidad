@@ -57,6 +57,8 @@ class LoginController {
             header('Location: index.php?action=login');
             exit();
         }
+        $bookCount = $this->bookController->countBook();
+        $books = $this->bookController->informationBook();
         include 'views\users\dashboardUser.php';
     }
 
