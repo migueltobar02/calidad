@@ -78,12 +78,10 @@
                                     <div class="book-overlay">
                                         <h3 class="book-title"><?php echo htmlspecialchars($book['name_book']); ?></h3>
                                         <p><i class="bi bi-person"></i> Autores</p>
-                
-                <!-- Fecha con ícono de ojo -->
-                <p><i class="bi bi-eye"></i> fecha</p>
-                
-                <!-- Leído con ícono de check -->
-                <p><i class="bi bi-check-circle"></i> leido</p>
+                                        <!-- Fecha con ícono de ojo -->
+                                        <p><i class="bi bi-eye"></i> fecha</p>
+                                        <!-- Leído con ícono de check -->
+                                        <p><i class="bi bi-check-circle"></i> leido</p>
                                     </div>
                                 </div>
                                 <?php endforeach; ?>

@@ -7,6 +7,23 @@ function confirmDelete(id , bookName) {
     form.action = 'index.php?action=confirmationdeleteBook&id='+ id;
 }
 
+function mostrarVistaPrevia() {
+    const inputImagen = document.getElementById('Inputimagen');
+    const vistaPrevia = document.getElementById('vista-previa');
+
+    const archivo = inputImagen.files[0];
+    if (archivo) {
+        const lector = new FileReader();
+
+        lector.onload = function(e) {
+            vistaPrevia.src = e.target.result;
+        }
+
+        lector.readAsDataURL(archivo);
+    }
+}
+
+
 document.addEventListener('DOMContentLoaded', function() {
     var sidebar = document.getElementById('sidebar');
     var sidebarCollapse = document.getElementById('sidebarCollapse');

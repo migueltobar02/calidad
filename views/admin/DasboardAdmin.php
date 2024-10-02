@@ -27,13 +27,13 @@
             </div>
             
             <ul class="list-unstyled components">
-                <li class="active">
-                    <a href="#" class=" text-decoration-none">
+                <li  href="#"class="active">
+                    <a  class=" text-decoration-none">
                         <i class="bi bi-speedometer2 me-2"></i> Dashboard
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="text-decoration-none">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#insertBookModal" class="text-decoration-none">
                         <i class="bi bi-book me-2"></i> Insertar libro
                     </a>
                 </li>
@@ -103,7 +103,6 @@
                             <img src="<?php echo htmlspecialchars($book['imagen_book']); ?>" alt="<?php echo htmlspecialchars($book['name_book']); ?>" class="book-cover">
                             <div class="book-overlay">
                                 <h3 class="book-title"><?php echo htmlspecialchars($book['name_book']); ?></h3>
-                                <p class="book-type"><?php echo htmlspecialchars($book['name_type']); ?></p>
                                 <div class="book-actions">
                                     <a href="index.php?action=updateBook&id=<?php echo $book['id_book']; ?>" class="btn btn-primary btn-sm">
                                         <i class="bi bi-pencil"></i> Actualizar
@@ -145,7 +144,10 @@
             </div>
         </div>
     </div>
-
+   
+    <?php
+    include 'views/admin/ModalInsertbook.php';
+    ?>
     <script src="assets/js/index.js" ></script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
