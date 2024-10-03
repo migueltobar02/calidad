@@ -49,6 +49,9 @@ class LoginController {
         }
         $bookCount = $this->bookController->countBook();
         $books = $this->bookController->informationBook();
+        $lenguajes = $this->bookController->lenguageBook();
+        $generos = $this->bookController->generBook();
+        $autors = $this->bookController->authorBook();
         include 'views/admin/DasboardAdmin.php';
     }
 

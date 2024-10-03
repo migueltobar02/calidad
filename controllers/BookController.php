@@ -18,6 +18,17 @@ class BookController {
         return $this->bookModel->informationBook();
     }
 
+    public function generBook() {
+        return $this->bookModel->generBook();
+    }
+    public function authorBook() {
+        return $this->bookModel->authorBook();
+    }
+    public function lenguageBook() {
+        return $this->bookModel->lenguageBook();
+    }
+
+
     public function updateBook() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $id_producto = $_POST['id'];

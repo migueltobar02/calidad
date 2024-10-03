@@ -4,6 +4,7 @@ require_once 'config/Db_conect.php';
 require_once 'controllers/LoginController.php';
 require_once 'controllers/BookController.php';
 require_once 'controllers/DelectController.php';
+require_once 'controllers/InsertController.php';
 
 // Manejar las solicitudes de archivos CSS
 if (preg_match('/\.css$/', $_SERVER["REQUEST_URI"])) {
@@ -17,6 +18,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'login';
 $loginController = new LoginController();
 $bookController = new BookController();
 $delectController = new DelectController();
+$InsertController = new InsertController();
 
 switch ($action) {
     case 'login':
@@ -39,6 +41,9 @@ switch ($action) {
         if (isset($_GET['id'])) {
             $delectController->deleteBook($_GET['id']);
         } 
+        break;
+    case 'insertBook':
+        $InsertController->insertBook();
         break;
     default:
         $loginController->showLoginForm();

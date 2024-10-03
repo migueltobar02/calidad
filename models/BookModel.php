@@ -37,6 +37,75 @@ class BookModel {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function generBook() {
+        $query = "SELECT * FROM geners";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function authorBook() {
+        $query = "SELECT * FROM authors";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function lenguageBook() {
+        $query = "SELECT * FROM languages";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function insertBook($bookName, $imagen, $price, $quantity, $description, $year, $gener, $author, $lenguage , $state, $rate) {
+        // Insertar libro
+        $query = "INSERT INTO books (name_book, imagen_book, price_book, amount_book, description_book, year_book , state_book , rate_book)
+                  VALUES (:bookName, :imagen, :price, :quantity, :description, :year ,  :state, :rate)";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':bookName', $bookName);
+        $stmt->bindParam(':imagen', $imagen);
+        $stmt->bindParam(':price', $price);
+        $stmt->bindParam(':quantity', $quantity);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':year', $year);
+        $stmt->bindParam(':state', $state);
+        $stmt->bindParam(':rate', $rate);
+        if ($stmt->execute()) {
+            $id_producto = $this->conn->lastInsertId();
+            // Actualizar las tablas relacionadas
+            $this->updateRelatedTablesInsert( $id_producto, $gener , $author, $lenguage);
+            return true;
+        }
+        return false;
+    }
+    private function updateRelatedTablesInsert($id ,$Genero, $Autor, $lenguaje) {
+
+        // Actualizar generos
+        $query = "INSERT INTO generbooks (id_book_generbook, id_gener_generbook ) VALUES (:id_producto, :Genero)";
+        $stmt = $this->conn->prepare($query);
+        
+        $stmt->bindParam(':id_producto', $id);
+        $stmt->bindParam(':Genero', $Genero);
+        $stmt->execute();   
+
+        // Actualizar autores
+        $query = "INSERT INTO authbooks (id_book_authbook , id_author_authbook) VALUES (:id_producto, :Autor)";
+        $stmt = $this->conn->prepare($query);
+       
+        $stmt->bindParam(':id_producto', $id);
+        $stmt->bindParam(':Autor', $Autor);
+        
+        $stmt->execute();
+
+        // Actualizar lenguajes
+        $query = "INSERT INTO lengbooks (id_book_lengbook, id_lenguage_lengbook) VALUES (:id_producto, :lenguage)";
+        $stmt = $this->conn->prepare($query);
+        
+        $stmt->bindParam(':id_producto', $id);
+        $stmt->bindParam(':lenguage', $lenguaje);
+        $stmt->execute();
+    }
+    
 
     public function updateBook($id_producto, $nombre, $imagen, $precio, $cantidad, $descripcion, $fecha, $Genero, $Tipo, $Autor, $lenguaje) {
         // Actualizar el libro
@@ -60,7 +129,10 @@ class BookModel {
         }
         return false;
     }
+
     
+    
+     
     private function updateRelatedTables($id_producto, $Genero, $Tipo, $Autor, $lenguaje) {
         // Actualizar generos
         $query = "UPDATE generbooks SET id_gener_generbook = :Genero WHERE id_book_generbook = :id_producto";

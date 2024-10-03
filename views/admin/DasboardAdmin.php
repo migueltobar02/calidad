@@ -147,6 +147,16 @@
    
     <?php
     include 'views/admin/ModalInsertbook.php';
+    if (isset($_SESSION['message'])) {
+        $message = $_SESSION['message'];
+        $message_type = $_SESSION['message_type'];
+    
+        echo "<script>alert('$message');</script>";
+    
+        // Limpiar el mensaje de la sesión después de mostrarlo
+        unset($_SESSION['message']);
+        unset($_SESSION['message_type']);
+    }
     ?>
     <script src="assets/js/index.js" ></script>
     <!-- Bootstrap JS -->
