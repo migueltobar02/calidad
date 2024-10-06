@@ -5,7 +5,7 @@ require_once 'controllers/LoginController.php';
 require_once 'controllers/BookController.php';
 require_once 'controllers/DelectController.php';
 require_once 'controllers/InsertController.php';
-
+require_once 'controllers/UpdateController.php';
 // Manejar las solicitudes de archivos CSS
 if (preg_match('/\.css$/', $_SERVER["REQUEST_URI"])) {
     header("Content-Type: text/css");
@@ -19,6 +19,7 @@ $loginController = new LoginController();
 $bookController = new BookController();
 $delectController = new DelectController();
 $InsertController = new InsertController();
+$UpdateController = new UpdateController();
 
 switch ($action) {
     case 'login':
@@ -44,6 +45,12 @@ switch ($action) {
         break;
     case 'insertBook':
         $InsertController->insertBook();
+        break;
+    case 'handleRequest':
+        $bookController->handleRequest();
+        break;
+    case 'UpdateBook':
+            $UpdateController->updateBook();
         break;
     default:
         $loginController->showLoginForm();

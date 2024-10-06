@@ -107,7 +107,7 @@ class BookModel {
     }
     
 
-    public function updateBook($id_producto, $nombre, $imagen, $precio, $cantidad, $descripcion, $fecha, $Genero, $Tipo, $Autor, $lenguaje) {
+    public function updateBook($id_producto, $nombre, $imagen, $precio, $cantidad, $descripcion, $fecha, $Genero, $Autor, $lenguaje) {
         // Actualizar el libro
         $query = "UPDATE books SET name_book = :nombre, imagen_book = :imagen, price_book = :precio, 
                   amount_book = :cantidad, description_book = :descripcion, year_book = :fecha 
@@ -121,30 +121,31 @@ class BookModel {
         $stmt->bindParam(':descripcion', $descripcion);
         $stmt->bindParam(':fecha', $fecha);
         $stmt->bindParam(':id_producto', $id_producto);
+
+        echo"<script>alert('lenguaje: $lenguaje  antes de actualizar tablas ');</script>";
     
         if ($stmt->execute()) {
             // Actualizar las tablas relacionadas
-            $this->updateRelatedTables($id_producto, $Genero, $Tipo, $Autor, $lenguaje);
+            $this->updateRelatedTables($id_producto, $Genero, $Autor, $lenguaje);
             return true;
         }
         return false;
     }
 
-    
-    
-     
-    private function updateRelatedTables($id_producto, $Genero, $Tipo, $Autor, $lenguaje) {
+    public function getBookById($id) {
+        $query = "SELECT id_book, imagen_book, name_book, price_book, amount_book, description_book, year_book, name_author, name_lenguage, name_gener, id_lenguage , id_gener, id_author FROM books INNER JOIN authbooks ON books.id_book = authbooks.id_book_authbook INNER JOIN authors ON authbooks.id_author_authbook = authors.id_author INNER JOIN lengbooks ON books.id_book = lengbooks.id_book_lengbook INNER JOIN languages ON lengbooks.id_lenguage_lengbook = languages.id_lenguage INNER JOIN generbooks ON books.id_book = generbooks.id_book_generbook INNER JOIN geners ON generbooks.id_gener_generbook = geners.id_gener WHERE id_book = :id AND state_book = 2 LIMIT 1;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    private function updateRelatedTables($id_producto, $Genero,  $Autor, $lenguaje) {
+
         // Actualizar generos
         $query = "UPDATE generbooks SET id_gener_generbook = :Genero WHERE id_book_generbook = :id_producto";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':Genero', $Genero);
-        $stmt->bindParam(':id_producto', $id_producto);
-        $stmt->execute();
-    
-        // Actualizar tipos
-        $query = "UPDATE typesbooks SET id_type_typebook = :Tipo WHERE id_book_typebook = :id_producto";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':Tipo', $Tipo);
         $stmt->bindParam(':id_producto', $id_producto);
         $stmt->execute();
     
@@ -156,6 +157,7 @@ class BookModel {
         $stmt->execute();
     
         // Actualizar lenguajes
+       
         $query = "UPDATE lengbooks SET id_lenguage_lengbook = :lenguaje WHERE id_book_lengbook = :id_producto";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':lenguaje', $lenguaje);

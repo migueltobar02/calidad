@@ -104,9 +104,11 @@
                             <div class="book-overlay">
                                 <h3 class="book-title"><?php echo htmlspecialchars($book['name_book']); ?></h3>
                                 <div class="book-actions">
-                                    <a href="index.php?action=updateBook&id=<?php echo $book['id_book']; ?>" class="btn btn-primary btn-sm">
+                                    <!-- <a href="index.php?action=updateBook&id=<?php echo $book['id_book']; ?>"  data-bs-toggle="modal" data-bs-target="#insertBookModal" class="btn btn-primary btn-sm">
                                         <i class="bi bi-pencil"></i> Actualizar
-                                    </a>
+                                    </a> -->
+                                    <button data-bs-toggle="modal" data-bs-target="#UpdateBookModal" class="btn btn-primary btn-sm" data-id="<?php echo $book['id_book']; ?>">
+                                        <i class="bi bi-pencil"></i> Actualizar</button>
                                     <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" onclick="confirmDelete(<?php echo $book['id_book']; ?>, '<?php echo addslashes($book['name_book']); ?>')">
                                         <i class="bi bi-trash"></i> Eliminar
                                     </button>
@@ -146,7 +148,11 @@
     </div>
    
     <?php
+    
     include 'views/admin/ModalInsertbook.php';
+    include 'views/admin/ModalUpdatebook.php';
+
+
     if (isset($_SESSION['message'])) {
         $message = $_SESSION['message'];
         $message_type = $_SESSION['message_type'];
