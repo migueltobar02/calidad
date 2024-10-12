@@ -8,7 +8,6 @@ function confirmDelete(id , bookName) {
 }
 
 
-
 document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('UpdateBookModal');
 
@@ -77,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function mostrarVistaPrevia() {
-    const inputImagen = document.getElementById('InputimagenUpdate');
+    const inputImagen = document.getElementById('Inputimagen');
     const vistaPrevia = document.getElementById('vista-previa');
 
     const archivo = inputImagen.files[0];
@@ -106,6 +105,7 @@ function mostrarVistaPreviaUpdate() {
         lector.readAsDataURL(archivo);
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', function() {
     var sidebar = document.getElementById('sidebar');

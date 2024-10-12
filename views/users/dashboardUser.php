@@ -72,14 +72,14 @@
                         <div class="offcanvas-body">
                         <div class="container-fluid">
                             <div class="book-container">
-                                <?php foreach ($books as $book): ?>
+                                <?php foreach ($readBooks as $readBook): ?>
                                 <div class="book-card">
-                                    <img src="<?php echo htmlspecialchars($book['imagen_book']); ?>" alt="<?php echo htmlspecialchars($book['name_book']); ?>" class="book-cover">
+                                    <img src="<?php echo htmlspecialchars($readBook['imagen_book']); ?>" alt="<?php echo htmlspecialchars($readBook['name_book']); ?>" class="book-cover">
                                     <div class="book-overlay">
-                                        <h3 class="book-title"><?php echo htmlspecialchars($book['name_book']); ?></h3>
-                                        <p><i class="bi bi-person"></i> Autores</p>
+                                        <h3 class="book-title"><?php echo htmlspecialchars($readBook['name_book']); ?></h3>
+                                        <p><i class="bi bi-person"> Autores: </i> <?php echo htmlspecialchars($readBook['name_author']); ?></p>
                                         <!-- Fecha con ícono de ojo -->
-                                        <p><i class="bi bi-eye"></i> fecha</p>
+                                        <p><i class="bi bi-eye"> fecha </i> <?php echo htmlspecialchars($readBook['date_readbook']); ?></p>
                                         <!-- Leído con ícono de check -->
                                         <p><i class="bi bi-check-circle"></i> leido</p>
                                     </div>

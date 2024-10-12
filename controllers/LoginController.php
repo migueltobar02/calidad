@@ -62,6 +62,7 @@ class LoginController {
         }
         $bookCount = $this->bookController->countBook();
         $books = $this->bookController->informationBook();
+        $readBooks = $this->bookController->readBook();
         include 'views\users\dashboardUser.php';
     }
 

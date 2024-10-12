@@ -164,5 +164,11 @@ class BookModel {
         $stmt->bindParam(':id_producto', $id_producto);
         $stmt->execute();
     }
-
+    public function readBook($userId) {
+        $query = "SELECT a.name_author, r.date_readbook, b.name_book, b.imagen_book FROM readbooks r JOIN authbooks ab ON r.id_book_readbook = ab.id_book_authbook JOIN authors a ON ab.id_author_authbook = a.id_author JOIN books b ON r.id_book_readbook = b.id_book WHERE r.id_user_readbook = :userId";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':userId', $userId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

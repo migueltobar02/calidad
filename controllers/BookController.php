@@ -9,7 +9,10 @@ class BookController {
         $db = $database->getConnection();
         $this->bookModel = new BookModel($db);
     }
-  
+    public function getUserId() {
+        // Retorna el ID del usuario desde la sesión
+        return isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+    }
 
     public function countBook() {
         return $this->bookModel->countBook();
@@ -117,6 +120,15 @@ class BookController {
         // Redirigir al dashboard o a la misma página
         header("Location: index.php?action=admin");  // Cambia 'dashboard.php' por la ruta de tu página
         exit();
+    }
+
+    public function readBook() {
+        $userId = $this->getUserId();
+        if ($userId) {
+            return  $readBooks = $this->bookModel->readBook($userId);
+            
+        }
+        return null;
     }
 
 }
