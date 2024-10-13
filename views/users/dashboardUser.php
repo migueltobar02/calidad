@@ -28,7 +28,7 @@
             
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="#" class=" text-decoration-none">
+                    <a href="?action=user" class="text-decoration-none">
                         <i class="bi bi-speedometer2 me-2"></i> Dashboard
                     </a>
                 </li>
@@ -60,9 +60,10 @@
                         <span class="visually-hidden">Toggle Sidebar</span>
                     </button>
                     <span class="navbar-brand mb-0 h1">Bienvenido a la biblioteca virtual</span>
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-primary" type="submit">Search</button>
+                    <form class="d-flex" role="search" method="GET" action="">
+                        <input type="hidden" name="action" value="user">
+                        <input class="form-control me-2" type="search" name="query" placeholder="Buscar libros o autores" aria-label="Search">
+                        <button class="btn btn-outline-primary" type="submit">Buscar</button>
                     </form>
                     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                         <div class="offcanvas-header">
@@ -95,20 +96,22 @@
             <div class="contenido-inferior-user">
                 <div class="container-fluid">
                     <div class="book-container">
-                        <?php foreach ($books as $book): ?>
-                        <div class="book-card">
-                            <img src="<?php echo htmlspecialchars($book['imagen_book']); ?>" alt="<?php echo htmlspecialchars($book['name_book']); ?>" class="book-cover">
-                            <div class="book-overlay">
-                                <h3 class="book-title"><?php echo htmlspecialchars($book['name_book']); ?></h3>
-    
-                                <!-- <div class="book-actions">
-                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" onclick="confirmDelete(<?php echo $book['id_book']; ?>, '<?php echo addslashes($book['name_book']); ?>')">
-                                        <i class="bi bi-trash"></i> Eliminar
-                                    </button>
-                                </div> -->
+                        <?php 
+                        $books = isset($_GET['query']) ? $bookController->searchBooks($_GET['query']) : $books;
+                        if (empty($books)): 
+                        ?>
+                            <p>No se encontraron libros.</p>
+                        <?php else: ?>
+                            <?php foreach ($books as $book): ?>
+                            <div class="book-card">
+                                <img src="<?php echo htmlspecialchars($book['imagen_book']); ?>" alt="<?php echo htmlspecialchars($book['name_book']); ?>" class="book-cover">
+                                <div class="book-overlay">
+                                    <h3 class="book-title"><?php echo htmlspecialchars($book['name_book']); ?></h3>
+                                    <p><i class="bi bi-person"></i> Autor: <?php echo htmlspecialchars($book['name_author']); ?></p>
+                                </div>
                             </div>
-                        </div>
-                        <?php endforeach; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
