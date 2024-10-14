@@ -22,6 +22,12 @@ $InsertController = new InsertController();
 $UpdateController = new UpdateController();
 
 switch ($action) {
+    case 'user':
+        $query = isset($_GET['query']) ? $_GET['query'] : '';
+        $books = $query ? $bookController->searchBooks($query) : $bookController->informationBook();
+        $readBooks = $bookController->readBook();
+        include 'views/users/dashboardUser.php';
+        break;
     case 'login':
         $loginController->showLoginForm();
         break;

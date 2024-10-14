@@ -9,6 +9,10 @@ class BookController {
         $db = $database->getConnection();
         $this->bookModel = new BookModel($db);
     }
+
+    public function searchBooks($query) {
+        return $this->bookModel->searchBooks($query);
+    }
     public function getUserId() {
         // Retorna el ID del usuario desde la sesión
         return isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
