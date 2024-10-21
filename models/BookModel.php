@@ -185,7 +185,7 @@ class BookModel {
           JOIN authbooks ab ON r.id_book_readbook = ab.id_book_authbook 
           JOIN authors a ON ab.id_author_authbook = a.id_author 
           JOIN books b ON r.id_book_readbook = b.id_book 
-          WHERE r.id_user_readbook = :userId ORDER BY r.id_book_readbook DESC ";
+          WHERE r.id_user_readbook = :userId ORDER BY r.date_readbook DESC ";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':userId', $userId);
         $stmt->execute();
