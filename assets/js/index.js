@@ -7,6 +7,34 @@ function confirmDelete(id , bookName) {
     form.action = 'index.php?action=confirmationdeleteBook&id='+ id;
 }
 
+function toggleReadStatus(checkbox) {
+    const bookId = checkbox.getAttribute('data-id');
+    const isRead = checkbox.checked ? 1 : 0; // Si está chequeado, 1 (leído), si no, 0 (no leído)
+
+    const formData = new FormData();
+    formData.append('id', bookId);
+    formData.append('is_read', isRead); // Enviar el estado de lectura
+    formData.append('action', 'updateReadStatus');
+
+    // Realizar la solicitud fetch y capturar la respuesta
+    fetch('index.php?action=updateReadStatus', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json()) // Procesar la respuesta JSON
+    .then(data => {
+        if (data.success) {
+            alert(data.message); // Mostrar el mensaje de éxito
+            window.location.reload();
+        } else {
+            alert('Error: ' + data.message); // Mostrar el mensaje de error
+        }
+    })
+    .catch(error => {
+        console.error('Error en la solicitud:', error);
+        alert('Error en la solicitud.'); // Mostrar un mensaje de error en caso de fallo
+    });
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('UpdateBookModal');

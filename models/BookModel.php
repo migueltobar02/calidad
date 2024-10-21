@@ -32,7 +32,7 @@ class BookModel {
     }
 
     public function informationBook() {
-        $query = "SELECT id_book, name_book, imagen_book FROM books WHERE books.state_book = 2";
+        $query = "SELECT b.id_book, b.name_book, b.imagen_book, CASE WHEN r.id_book_readbook IS NOT NULL THEN 1 ELSE 0  END AS is_read FROM books b LEFT JOIN readbooks r ON b.id_book = r.id_book_readbook WHERE b.state_book = 2";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -165,10 +165,36 @@ class BookModel {
         $stmt->execute();
     }
     public function readBook($userId) {
-        $query = "SELECT a.name_author, r.date_readbook, b.name_book, b.imagen_book FROM readbooks r JOIN authbooks ab ON r.id_book_readbook = ab.id_book_authbook JOIN authors a ON ab.id_author_authbook = a.id_author JOIN books b ON r.id_book_readbook = b.id_book WHERE r.id_user_readbook = :userId";
+        $query = "SELECT a.name_author, r.date_readbook, b.name_book, b.imagen_book 
+          FROM readbooks r 
+          JOIN authbooks ab ON r.id_book_readbook = ab.id_book_authbook 
+          JOIN authors a ON ab.id_author_authbook = a.id_author 
+          JOIN books b ON r.id_book_readbook = b.id_book 
+          WHERE r.id_user_readbook = :userId ORDER BY r.id_book_readbook DESC ";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':userId', $userId);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function markUnreadBook($id) {
+        $query = "DELETE FROM readbooks WHERE id_book_readbook = :id_book_readbook";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id_book_readbook', $id);
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+    public function updateReadBook($id, $idUser, $DateBook) {
+        $query = "INSERT INTO readbooks (id_book_readbook, id_user_readbook, date_readbook) VALUES (:id_book_readbook, :id_user_readbook, :date_readbook)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id_book_readbook', $id);
+        $stmt->bindParam(':id_user_readbook', $idUser);
+        $stmt->bindParam(':date_readbook', $DateBook);
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
     }
 }

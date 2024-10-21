@@ -50,7 +50,10 @@ switch ($action) {
         $bookController->handleRequest();
         break;
     case 'UpdateBook':
-            $UpdateController->updateBook();
+        $UpdateController->updateBook();
+        break;
+    case 'updateReadStatus':
+        $UpdateController->updateReadBook();
         break;
     default:
         $loginController->showLoginForm();

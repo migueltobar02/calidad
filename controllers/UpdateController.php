@@ -57,6 +57,43 @@ class UpdateController {
         exit;
         }
     }
+    public function updateReadBook() {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'updateReadStatus') {
+                $idBook = $_POST['id'];
+                $idUser = $_SESSION['user_id'];
+                $isRead = $_POST['is_read']; // Obtener el valor si está leído o no
+                date_default_timezone_set('America/Mexico_City');
+                $DateBook = date('Y-m-d H:i:s');
+    
+                if ($isRead == 1) {
+                    // Marcar como leído
+                    $isUpdated = $this->bookModel->updateReadBook($idBook, $idUser, $DateBook);
+                    if ($isUpdated) {
+                        echo json_encode(['success' => true, 'message' => 'Libro marcado como leído']);
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'Error al marcar como leído']);
+                    }
+                } else {
+                    // Desmarcar como leído
+                    $isUpdated = $this->bookModel->markUnreadBook($idBook);
+                    if ($isUpdated) {
+                        echo json_encode(['success' => true, 'message' => 'Libro desmarcado']);
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'Error al desmarcar como leído']);
+                    }
+                }
+                exit;
+            }
+        } catch (Exception $e) {
+            error_log("Error en updateReadBook: " . $e->getMessage());
+            echo json_encode(['success' => false, 'message' => 'Se ha producido un error.']);
+            exit;
+        }
+    }   
+
+
+
 }           
 
 ?>  

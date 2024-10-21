@@ -101,11 +101,12 @@
                             <div class="book-overlay">
                                 <h3 class="book-title"><?php echo htmlspecialchars($book['name_book']); ?></h3>
     
-                                <!-- <div class="book-actions">
-                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" onclick="confirmDelete(<?php echo $book['id_book']; ?>, '<?php echo addslashes($book['name_book']); ?>')">
-                                        <i class="bi bi-trash"></i> Eliminar
-                                    </button>
-                                </div> -->
+                                <div class="book-actions">
+                        <!-- Reemplazamos el botón por un checkbox -->
+                        <input type="checkbox" class="book-read-checkbox" data-id="<?php echo $book['id_book']; ?>" 
+                               <?php echo $book['is_read'] ? 'checked' : ''; ?> onclick="toggleReadStatus(this)">
+                        <label style="color: white;" for="read-checkbox">Leído</label >
+                    </div>
                             </div>
                         </div>
                         <?php endforeach; ?>
