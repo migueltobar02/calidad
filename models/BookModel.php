@@ -6,6 +6,21 @@ class BookModel {
         $this->conn = $db;
     }
 
+    public function searchBooks($query) {
+        $query = "%$query%";
+        $sql = "SELECT b.id_book, b.name_book, b.imagen_book, a.name_author 
+                FROM books b 
+                INNER JOIN authbooks ab ON b.id_book = ab.id_book_authbook 
+                INNER JOIN authors a ON ab.id_author_authbook = a.id_author 
+                WHERE b.name_book LIKE :query OR a.name_author LIKE :query 
+                AND b.state_book = 2";
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':query', $query, PDO::PARAM_STR);
+        $stmt->execute();
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function deleteBook($id_book) {
         // Utiliza un marcador de posición para el ID
         $query = "UPDATE books SET state_book = 1 WHERE books.id_book = :id_book";
