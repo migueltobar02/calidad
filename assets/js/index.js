@@ -6,7 +6,7 @@ function confirmDelete(id , bookName) {
     var id = document.getElementById('id_book').value;
     form.action = 'index.php?action=confirmationdeleteBook&id='+ id;
 }
-
+// Cambiar el estado de lectura de un libro
 function toggleReadStatus(checkbox) {
     const bookId = checkbox.getAttribute('data-id');
     const isRead = checkbox.checked ? 1 : 0; // Si está chequeado, 1 (leído), si no, 0 (no leído)

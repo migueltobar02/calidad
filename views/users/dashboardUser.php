@@ -93,6 +93,7 @@
                     </div>
                 </div>
             </nav>
+             <!-- Mostrar los libros disponibles y el checkbox para marcarlos como leídos -->
             <div class="contenido-inferior-user">
                 <div class="container-fluid">
                     <div class="book-container">
