@@ -26,6 +26,7 @@ switch ($action) {
         $query = isset($_GET['query']) ? $_GET['query'] : '';
         $books = $query ? $bookController->searchBooks($query) : $bookController->informationBook();
         $readBooks = $bookController->readBook();
+        $searchHistory = $bookController->getSearchHistory();
         include 'views/users/dashboardUser.php';
         break;
     case 'login':

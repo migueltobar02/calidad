@@ -6,21 +6,93 @@ class BookModel {
         $this->conn = $db;
     }
 
-    public function searchBooks($query) {
-        $query = "%$query%";
-        $sql = "SELECT b.id_book, b.name_book, b.imagen_book, a.name_author 
-                FROM books b 
-                INNER JOIN authbooks ab ON b.id_book = ab.id_book_authbook 
-                INNER JOIN authors a ON ab.id_author_authbook = a.id_author 
-                WHERE b.name_book LIKE :query OR a.name_author LIKE :query 
-                AND b.state_book = 2";
-        
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':query', $query, PDO::PARAM_STR);
-        $stmt->execute();
-        
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+public function saveSearch($userId, $bookId) {
+    // Verificamos si ya existe una búsqueda para este usuario y libro
+    $checkQuery = "SELECT * FROM searchbooks WHERE id_user_searchbook = :userId AND id_book_searchbook = :bookId";
+    $stmt = $this->conn->prepare($checkQuery);
+    $stmt->bindParam(':userId', $userId);
+    $stmt->bindParam(':bookId', $bookId);
+    $stmt->execute();
+    $existingSearch = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Si ya existe, actualizamos la fecha de búsqueda
+    if ($existingSearch) {
+        $updateQuery = "UPDATE searchbooks 
+                        SET date_searchbook = :currentDate 
+                        WHERE id_user_searchbook = :userId AND id_book_searchbook = :bookId";
+        $stmt = $this->conn->prepare($updateQuery);
+        $currentDate = date('Y-m-d');
+        $stmt->bindParam(':currentDate', $currentDate);
+        $stmt->bindParam(':userId', $userId);
+        $stmt->bindParam(':bookId', $bookId);
+        return $stmt->execute();
     }
+
+    // Si no existe, contamos cuántas búsquedas tiene el usuario
+    $countQuery = "SELECT COUNT(*) as count FROM searchbooks WHERE id_user_searchbook = :userId";
+    $stmt = $this->conn->prepare($countQuery);
+    $stmt->bindParam(':userId', $userId);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Si hay 20 o más búsquedas, eliminamos la más antigua
+    if ($result['count'] >= 20) {
+        $deleteQuery = "DELETE FROM searchbooks 
+                       WHERE id_user_searchbook = :userId 
+                       ORDER BY date_searchbook ASC 
+                       LIMIT 1";
+        $stmt = $this->conn->prepare($deleteQuery);
+        $stmt->bindParam(':userId', $userId);
+        $stmt->execute();
+    }
+
+    // Guardamos la nueva búsqueda
+    $currentDate = date('Y-m-d');
+    $insertQuery = "INSERT INTO searchbooks (id_book_searchbook, id_user_searchbook, date_searchbook) 
+                   VALUES (:bookId, :userId, :currentDate)";
+    $stmt = $this->conn->prepare($insertQuery);
+    $stmt->bindParam(':bookId', $bookId);
+    $stmt->bindParam(':userId', $userId);
+    $stmt->bindParam(':currentDate', $currentDate);
+    return $stmt->execute();
+}
+
+
+public function getSearchHistory($userId) {
+    $query = "SELECT s.date_searchbook, b.name_book, b.id_book, b.imagen_book, a.name_author 
+              FROM searchbooks s 
+              INNER JOIN books b ON s.id_book_searchbook = b.id_book 
+              INNER JOIN authbooks ab ON b.id_book = ab.id_book_authbook
+              INNER JOIN authors a ON ab.id_author_authbook = a.id_author
+              WHERE s.id_user_searchbook = :userId 
+              ORDER BY s.date_searchbook DESC";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':userId', $userId);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function searchBooks($query) {
+    $query = "%$query%";
+    $sql = "SELECT b.id_book, b.name_book, b.imagen_book, a.name_author, 
+                   CASE WHEN r.id_book_readbook IS NOT NULL THEN 1 ELSE 0 END AS is_read
+            FROM books b
+            INNER JOIN authbooks ab ON b.id_book = ab.id_book_authbook 
+            INNER JOIN authors a ON ab.id_author_authbook = a.id_author
+            LEFT JOIN readbooks r ON b.id_book = r.id_book_readbook AND r.id_user_readbook = :userId
+            WHERE (b.name_book LIKE :query OR a.name_author LIKE :query) 
+              AND b.state_book = 2";
+    
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':query', $query, PDO::PARAM_STR);
+    $stmt->bindParam(':userId', $_SESSION['user_id'], PDO::PARAM_INT); // Añadimos userId para verificar si fue leído
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
     public function deleteBook($id_book) {
         // Utiliza un marcador de posición para el ID
         $query = "UPDATE books SET state_book = 1 WHERE books.id_book = :id_book";

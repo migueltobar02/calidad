@@ -65,6 +65,9 @@
                         <input class="form-control me-2" type="search" name="query" placeholder="Buscar libros o autores" aria-label="Search">
                         <button class="btn btn-outline-primary" type="submit">Buscar</button>
                     </form>
+                    <button class="btn btn-outline-secondary ms-2" type="button" data-bs-toggle="modal" data-bs-target="#searchHistoryModal">
+                        <i class="bi bi-clock-history"></i> Historial
+                    </button>
                     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                         <div class="offcanvas-header">
                             <h5 class="offcanvas-title" id="offcanvasNavbarLabel">libros leidos</h5> 
@@ -119,6 +122,50 @@
     </div>
 
 
+<div class="modal fade" id="searchHistoryModal" tabindex="-1" aria-labelledby="searchHistoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="searchHistoryModalLabel">Historial de Búsquedas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    <div class="row g-3">
+                        <?php foreach ($searchHistory as $search): ?>
+                            <div class="col-12">
+                                <div class="card mb-3">
+                                    <div class="row g-0">
+                                        <div class="col-md-2">
+                                            <img src="<?php echo htmlspecialchars($search['imagen_book']); ?>" 
+                                                class="img-fluid rounded-start" 
+                                                alt="<?php echo htmlspecialchars($search['name_book']); ?>">
+                                        </div>
+                                        <div class="col-md-10">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <!-- Enlace para automatizar la búsqueda -->
+                                                    <a href="?action=user&query=<?php echo urlencode($search['name_book']); ?>">
+                                                        <?php echo htmlspecialchars($search['name_book']); ?>
+                                                    </a>
+                                                </h5>
+                                                <p class="card-text">
+                                                    <small class="text-muted">Autor: <?php echo htmlspecialchars($search['name_author']); ?></small>
+                                                </p>
+                                                <p class="card-text">
+                                                    <small class="text-muted">Fecha de búsqueda: <?php echo $search['date_searchbook']; ?></small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+</div>
 
     <script src="assets/js/index.js" ></script>
     <!-- Bootstrap JS -->

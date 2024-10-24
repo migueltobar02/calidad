@@ -10,9 +10,34 @@ class BookController {
         $this->bookModel = new BookModel($db);
     }
 
-    public function searchBooks($query) {
-        return $this->bookModel->searchBooks($query);
+
+public function searchBooks($query) {
+    $results = $this->bookModel->searchBooks($query);
+    
+    // Si hay resultados, guardamos el primer libro encontrado en el historial
+    if (!empty($results)) {
+        $this->saveSearchHistory($results[0]['id_book']);
     }
+    
+    return $results;
+}
+
+public function saveSearchHistory($bookId) {
+    $userId = $this->getUserId();
+    if ($userId && !empty($bookId)) {
+        return $this->bookModel->saveSearch($userId, $bookId);
+    }
+    return false;
+}
+
+
+public function getSearchHistory() {
+    $userId = $this->getUserId();
+    if ($userId) {
+        return $this->bookModel->getSearchHistory($userId);
+    }
+    return [];
+}
     public function getUserId() {
         // Retorna el ID del usuario desde la sesión
         return isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
