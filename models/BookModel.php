@@ -23,7 +23,7 @@ public function saveSearch($userId, $bookId) {
                         SET date_searchbook = :currentDate 
                         WHERE id_user_searchbook = :userId AND id_book_searchbook = :bookId";
         $stmt = $this->conn->prepare($updateQuery);
-        $currentDate = date('Y-m-d');
+        $currentDate = date('Y-m-d H:i:s');
         $stmt->bindParam(':currentDate', $currentDate);
         $stmt->bindParam(':userId', $userId);
         $stmt->bindParam(':bookId', $bookId);
@@ -38,7 +38,7 @@ public function saveSearch($userId, $bookId) {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Si hay 20 o más búsquedas, eliminamos la más antigua
-    if ($result['count'] >= 20) {
+    if ($result['count'] >= 10) {
         $deleteQuery = "DELETE FROM searchbooks 
                        WHERE id_user_searchbook = :userId 
                        ORDER BY date_searchbook ASC 
@@ -49,7 +49,7 @@ public function saveSearch($userId, $bookId) {
     }
 
     // Guardamos la nueva búsqueda
-    $currentDate = date('Y-m-d');
+    $currentDate = date('Y-m-d H:i:s');
     $insertQuery = "INSERT INTO searchbooks (id_book_searchbook, id_user_searchbook, date_searchbook) 
                    VALUES (:bookId, :userId, :currentDate)";
     $stmt = $this->conn->prepare($insertQuery);
